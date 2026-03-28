@@ -648,6 +648,31 @@
       text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
 
+    .mood-ref {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      z-index: 1;
+    }
+
+    .mood-ref a {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      text-shadow: none;
+    }
+
+    .mood-ref a:hover {
+      color: #fff;
+      background: var(--accent);
+    }
+
     @media (max-width: 640px) {
       .intro h2 { font-size: 22px; }
       .question-card { padding: 18px; }
@@ -722,6 +747,11 @@
               <div class="mood-check">&#10003;</div>
               <div class="mood-label">고급스럽고 세련된</div>
               <div class="mood-keywords">프리미엄 / 럭셔리 / 골드 톤 / 다크 배경</div>
+              <div class="mood-ref">
+                <a href="https://www.cartier.com/" target="_blank" onclick="event.stopPropagation()">Cartier</a>
+                <a href="https://www.rolex.com/" target="_blank" onclick="event.stopPropagation()">Rolex</a>
+                <a href="https://www.bulgari.com/" target="_blank" onclick="event.stopPropagation()">Bulgari</a>
+              </div>
             </div>
           </label>
           <label class="mood-card" onclick="toggleMood(this)">
@@ -730,6 +760,11 @@
               <div class="mood-check">&#10003;</div>
               <div class="mood-label">활기차고 에너지 넘치는</div>
               <div class="mood-keywords">비비드 컬러 / 다이나믹 / 축제 / 라이브</div>
+              <div class="mood-ref">
+                <a href="https://www.redbull.com/" target="_blank" onclick="event.stopPropagation()">Red Bull</a>
+                <a href="https://www.nike.com/" target="_blank" onclick="event.stopPropagation()">Nike</a>
+                <a href="https://superf.ly/" target="_blank" onclick="event.stopPropagation()">Superfly</a>
+              </div>
             </div>
           </label>
           <label class="mood-card" onclick="toggleMood(this)">
@@ -738,6 +773,11 @@
               <div class="mood-check">&#10003;</div>
               <div class="mood-label">신뢰감 있고 안정적인</div>
               <div class="mood-keywords">블루 / 네이비 / 기업적 / 정돈된</div>
+              <div class="mood-ref">
+                <a href="https://www.samsung.com/sec/" target="_blank" onclick="event.stopPropagation()">Samsung</a>
+                <a href="https://www.ibm.com/" target="_blank" onclick="event.stopPropagation()">IBM</a>
+                <a href="https://stripe.com/" target="_blank" onclick="event.stopPropagation()">Stripe</a>
+              </div>
             </div>
           </label>
           <label class="mood-card" onclick="toggleMood(this)">
@@ -746,6 +786,11 @@
               <div class="mood-check">&#10003;</div>
               <div class="mood-label">모던하고 미니멀한</div>
               <div class="mood-keywords">여백 / 화이트 / 심플 / 타이포 중심</div>
+              <div class="mood-ref">
+                <a href="https://www.apple.com/" target="_blank" onclick="event.stopPropagation()">Apple</a>
+                <a href="https://linear.app/" target="_blank" onclick="event.stopPropagation()">Linear</a>
+                <a href="https://www.aesop.com/" target="_blank" onclick="event.stopPropagation()">Aesop</a>
+              </div>
             </div>
           </label>
         </div>
