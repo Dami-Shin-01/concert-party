@@ -1022,7 +1022,8 @@
       <div class="btn-group">
         <button class="btn btn-secondary" onclick="resetForm()">초기화</button>
         <button class="btn btn-secondary" onclick="saveLocal()">임시 저장</button>
-        <button class="btn btn-primary" onclick="exportJSON()">저장 & 내보내기</button>
+        <button class="btn btn-secondary" onclick="exportJSON()">JSON 내보내기</button>
+        <button class="btn btn-primary" onclick="sendEmail()">이메일 전송</button>
       </div>
     </div>
   </div>
@@ -1186,6 +1187,110 @@
       URL.revokeObjectURL(url);
       saveLocal();
       showToast('저장 완료! JSON 파일이 다운로드됩니다.');
+    }
+
+    function formatEmailBody() {
+      const data = collectData();
+      const count = getAnsweredCount();
+      let body = '';
+      body += '================================\n';
+      body += '콘서트파티 웹사이트 제작 질문서\n';
+      body += '================================\n\n';
+      body += '작성일: ' + new Date().toLocaleDateString('ko-KR') + '\n';
+      body += '답변 완료: ' + count + ' / ' + TOTAL_QUESTIONS + '\n\n';
+      body += '--- 1차 회의 확정 사항 ---\n';
+      body += '✅ D-1: 없음 (신규 제작)\n';
+      body += '✅ E-3: 적극적 — 히어로 섹션에 트렌디한 3D 모션 ���용\n\n';
+
+      const questionMap = {
+        a1: 'A-1. 기존 로고/CI 자료',
+        a2: 'A-2. 브랜드 톤 & 무드',
+        a3: 'A-3. 슬로건/핵심 메시���',
+        b1: 'B-1. 포트폴리오 수량/유형',
+        b2: 'B-2. 사진/영상 자료',
+        b3: 'B-3. 고객사 로고 사용',
+        b4: 'B-4. 실적/수상 경력',
+        c1: 'C-1. 필수 페이지',
+        c2: 'C-2. 포트폴리오 필터링',
+        c3: 'C-3. 문의/견적 기능',
+        c4: 'C-4. 다국어 지원',
+        c5: 'C-5. 블로그/뉴스',
+        d2: 'D-2. 도메인',
+        d3: 'D-3. CMS 필요 여부',
+        d4: 'D-4. 예산 범위',
+        d5: 'D-5. 런칭 일정',
+        d6: 'D-6. 유지보수 계획',
+        e1: 'E-1. 레퍼런스 사이트',
+        e2: 'E-2. 디자인 스타일',
+        e3_1: 'E-3-1. 히어로 3D 모션 방향',
+        e3_2: 'E-3-2. 3D 모션 레퍼런스 선호',
+        e4: 'E-4. 경쟁사 벤치마크'
+      };
+
+      const valueMap = {
+        logo: '로고 파일', color: '컬러 가이드', font: '서체 가이드', design: '기존 디자인 자료', none: '보유 자료 없음',
+        luxury: '고급스럽고 세련된', energy: '활기차고 에너지 넘치는', trust: '신뢰감 있고 안정적인', modern: '모던하고 미니멀한',
+        gov: '공공기관 행사', corp: '기업 행사', concert: '콘서트/공연', festival: '축제/페스티벌', intl: '국제행사',
+        high: '고화질 보유', partial: '일부 보유', yes: '가능/보유/필요', check: '확인 필요', no: '불가/없음/불필요',
+        home: '메인(홈)', about: '회사소개', service: '서비��� 소개', portfolio: '포트폴리오', contact: '문의/견적', blog: '블로그/뉴스', career: '채용 정보',
+        type: '행사 유형별', client: '고객 유형별', year: '연도별', search: '검색 기능', simple: '간단한 목록',
+        detail: '견적 요청 폼(상세)', phone: '전화/카카오톡',
+        ko: '한국어만', ko_en: '한국어 + 영어',
+        optional: '있으면 좋겠지만 필수는 아님',
+        under500: '500만원 미만', '500_1000': '500~1,000만원', '1000_2000': '1,000~2,000만원', over2000: '2,000만원 이상', undecided: '미정/제안 희망',
+        monthly: '월간 유지보수 계약', ondemand: '건별 요청', self: '자체 관리',
+        dark: '다크 톤', light: '라이트 톤', colorful: '컬러풀', minimal: '미니멀',
+        lighting: '무대 조명 연출', concert_feel: '콘서트 현장감', particle: '추상적 파티클', immersive: '이머시브 공간', cinematic: '시네마틱 전환',
+        lusion: 'Lusion (lusion.co)', activetheory: 'Active Theory', noomo: 'Noomo Agency', epic: 'Epic (epic.net)',
+        unsure: '잘 모르겠음'
+      };
+
+      const sections = {
+        'A. 브랜드 & 아이덴티티': ['a1', 'a2', 'a3'],
+        'B. 콘텐츠 & 포트폴리오': ['b1', 'b2', 'b3', 'b4'],
+        'C. 웹사이트 기능 & 구조': ['c1', 'c2', 'c3', 'c4', 'c5'],
+        'D. 기술 & 운영': ['d2', 'd3', 'd4', 'd5', 'd6'],
+        'E. 디자인 & 모션 선호도': ['e1', 'e2', 'e3_1', 'e3_2', 'e4']
+      };
+
+      Object.entries(sections).forEach(([sectionName, qids]) => {
+        body += '--- ' + sectionName + ' ---\n\n';
+        qids.forEach(qid => {
+          const label = questionMap[qid] || qid;
+          const answer = data.answers[qid];
+          if (answer) {
+            body += label + '\n';
+            if (answer.selected) {
+              answer.selected.forEach(v => {
+                body += '  ✓ ' + (valueMap[v] || v) + '\n';
+              });
+            }
+            if (answer.text) {
+              Object.entries(answer.text).forEach(([k, v]) => {
+                body += '  → ' + v + '\n';
+              });
+            }
+            body += '\n';
+          } else {
+            body += label + '\n  (미답변)\n\n';
+          }
+        });
+      });
+
+      body += '================================\n';
+      body += '콘서트파티 웹사이트 제작 질문서 끝\n';
+      return body;
+    }
+
+    function sendEmail() {
+      saveLocal();
+      const body = formatEmailBody();
+      const subject = '[콘서트파티] 웹사이트 제작 질문서 회신 (' + new Date().toLocaleDateString('ko-KR') + ')';
+      const mailto = 'mailto:de.onadot@gmail.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+      window.location.href = mailto;
+      showToast('이메일 클라이언트가 열립니다.');
     }
 
     function resetForm() {
