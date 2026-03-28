@@ -556,6 +556,98 @@
     }
 
     /* Responsive */
+    /* Mood Cards */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mood-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .mood-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .mood-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .mood-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mood-visual {
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .mood-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%);
+    }
+
+    .mood-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: transparent;
+      transition: all 0.2s ease;
+      z-index: 2;
+    }
+
+    .mood-card.selected .mood-check {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .mood-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+
+    .mood-keywords {
+      font-size: 11px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 4px;
+      z-index: 1;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
     @media (max-width: 640px) {
       .intro h2 { font-size: 22px; }
       .question-card { padding: 18px; }
@@ -563,6 +655,8 @@
       .ref-desc { width: 100%; margin-left: 32px; }
       .ref-url { margin-left: 32px; }
       .input-row { flex-direction: column; }
+      .mood-grid { grid-template-columns: 1fr; }
+      .mood-visual { height: 120px; }
     }
   </style>
 </head>
@@ -621,11 +715,39 @@
       <div class="question-card" data-question="a2">
         <div class="question-id">A-2</div>
         <div class="question-title">선호하시는 브랜드 톤 & 무드가 있으신가요? (복수 선택 가능)</div>
-        <div class="option-list">
-          <label class="option-item"><input type="checkbox" name="a2" value="luxury" onchange="updateProgress()"> 고급스럽고 세련된</label>
-          <label class="option-item"><input type="checkbox" name="a2" value="energy" onchange="updateProgress()"> 활기차고 에너지 넘치는</label>
-          <label class="option-item"><input type="checkbox" name="a2" value="trust" onchange="updateProgress()"> 신뢰감 있고 안정적인</label>
-          <label class="option-item"><input type="checkbox" name="a2" value="modern" onchange="updateProgress()"> 모던하고 미니멀한</label>
+        <div class="mood-grid">
+          <label class="mood-card" onclick="toggleMood(this)">
+            <input type="checkbox" name="a2" value="luxury" onchange="updateProgress()">
+            <div class="mood-visual" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&h=400&fit=crop&q=80')">
+              <div class="mood-check">&#10003;</div>
+              <div class="mood-label">고급스럽고 세련된</div>
+              <div class="mood-keywords">프리미엄 / 럭셔리 / 골드 톤 / 다크 배경</div>
+            </div>
+          </label>
+          <label class="mood-card" onclick="toggleMood(this)">
+            <input type="checkbox" name="a2" value="energy" onchange="updateProgress()">
+            <div class="mood-visual" style="background-image:url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&h=400&fit=crop&q=80')">
+              <div class="mood-check">&#10003;</div>
+              <div class="mood-label">활기차고 에너지 넘치는</div>
+              <div class="mood-keywords">비비드 컬러 / 다이나믹 / 축제 / 라이브</div>
+            </div>
+          </label>
+          <label class="mood-card" onclick="toggleMood(this)">
+            <input type="checkbox" name="a2" value="trust" onchange="updateProgress()">
+            <div class="mood-visual" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop&q=80')">
+              <div class="mood-check">&#10003;</div>
+              <div class="mood-label">신뢰감 있고 안정적인</div>
+              <div class="mood-keywords">블루 / 네이비 / 기업적 / 정돈된</div>
+            </div>
+          </label>
+          <label class="mood-card" onclick="toggleMood(this)">
+            <input type="checkbox" name="a2" value="modern" onchange="updateProgress()">
+            <div class="mood-visual" style="background-image:url('https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=600&h=400&fit=crop&q=80')">
+              <div class="mood-check">&#10003;</div>
+              <div class="mood-label">모던하고 미니멀한</div>
+              <div class="mood-keywords">여백 / 화이트 / 심플 / 타이포 중심</div>
+            </div>
+          </label>
         </div>
         <div class="input-group">
           <label class="input-label">기타</label>
@@ -1411,9 +1533,19 @@
       showToast('초기화 완료');
     }
 
+    function toggleMood(card) {
+      const input = card.querySelector('input');
+      card.classList.toggle('selected', input.checked);
+      updateProgress();
+    }
+
     // Init
     loadLocal();
     updateProgress();
+    // Restore mood card visual state
+    document.querySelectorAll('.mood-card input:checked').forEach(input => {
+      input.closest('.mood-card').classList.add('selected');
+    });
   </script>
 </body>
 </html>
